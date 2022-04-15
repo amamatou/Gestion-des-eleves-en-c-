@@ -15,7 +15,7 @@ namespace ProjetFin
         public Form1()
         {
             InitializeComponent();
-            Connexion.Connect("tp4");
+            //Connexion.Connect("tp4");
            
         }
 

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Data;
 using Microsoft.Xrm.Sdk.Messages;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using System.Data.SqlClient;
 
 namespace TestConnexion
 {
@@ -46,100 +47,154 @@ namespace TestConnexion
             return eoDynamic;
         }
 
-        public int save()
+        public int save(string procName=null)
         {
-            int a = 0;
+            
+                int a = 0;
             Dictionary<string, string> dico = new Dictionary<string, string>();
             dico = ObjectToDictionary<string>(this);
             int nombre = dico.Count();
+            List<string> champs = Connexion.getChamps_table(this.GetType().Name);
             //Console.WriteLine(nombre);
-            if (id == 0)
+            if (procName == null)
             {
-                string requete = "Insert into " + this.GetType().Name + "(";
-                foreach (KeyValuePair<string, string> d in dico)
+                if (id == 0)
                 {
-                    a++;
-                    if (a < nombre - 1)
+                    string requete = "Insert into " + this.GetType().Name + "(";
+                        foreach (KeyValuePair<string, string> d in dico)
                     {
-                        requete += d.Key + ",";
+                        a++;
+                        if (a < nombre - 1)
+                        {
+                            requete += d.Key + ",";
+                        }
+                        else if (a == nombre - 1)
+                            requete += d.Key;
                     }
-                    else if (a == nombre - 1)
-                        requete += d.Key;
-                }
-                a = 0;
-                requete += ") values('";
-                foreach (KeyValuePair<string, string> keyValuePair in dico)
-                {
-                    a++;
-                    if(a<nombre-1)
+                    a = 0;
+                    requete += ") values('";
+                    foreach (KeyValuePair<string, string> keyValuePair in dico)
                     {
-                        requete += keyValuePair.Value + "','";
-                    }
-                    else if(a == nombre - 1)
-                        requete += keyValuePair.Value + "');";
+                        a++;
+                        if (a < nombre - 1)
+                        {
+                            requete += keyValuePair.Value + "','";
+                        }
+                        else if (a == nombre - 1)
+                            requete += keyValuePair.Value + "');";
 
+                    }
+                    //Console.WriteLine(a);
+                    id++;
+                    //foreach (KeyValuePair<string, string> d in dico)
+                    //{
+                    //    Console.WriteLine("{0} : {1}", d.Key, d.Value);
+                    //}
+                    return Connexion.IUD(requete);
                 }
-                //Console.WriteLine(a);
-                id++;
-                //foreach (KeyValuePair<string, string> d in dico)
-                //{
-                //    Console.WriteLine("{0} : {1}", d.Key, d.Value);
-                //}
-                return Connexion.IUD(requete);
+                else
+                {
+                    string requete = "Update " + this.GetType().Name + " set ";
+                    foreach (KeyValuePair<string, string> keyValuePair in dico)
+                    {
+                        if (a < nombre - 2)
+                        {
+                            requete += keyValuePair.Key + " = '" + keyValuePair.Value + "', ";
+                        }
+                        else if (a == nombre - 2)
+                            requete += keyValuePair.Key + " = '" + keyValuePair.Value;
+                        a++;
+                    }
+                    //foreach (KeyValuePair<string, string> keyValuePair in dico)
+                    //{
+                    //    requete += keyValuePair.Value + ",";
+                    //}
+                    //requete += "' where " + champs[0] + "='" + dico.FirstOrDefault().Value + "'";
+                    requete += "' where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault() + "='" + dico.FirstOrDefault().Value + "'";
+                    Console.WriteLine(requete);
+
+                    return Connexion.IUD(requete);
+                }
             }
             else
             {
-                string requete = "Update " + this.GetType().Name + " set ";
-                foreach (KeyValuePair<string, string> keyValuePair in dico)
+                if(Connexion.GetCommand().Connection is MySqlConnection)
                 {
-                        if (a < nombre -2)
-                        {
-                            requete += keyValuePair.Key +" = '"+keyValuePair.Value + "', ";
-                        }
-                        else if (a == nombre -2)
-                            requete += keyValuePair.Key + " = '" + keyValuePair.Value;
-                    a++;
+                    MySqlCommand cmd = (MySqlCommand)Connexion.GetCommand();
+                    cmd.CommandText = procName;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    Console.WriteLine(dico[champs[0]]);
+                    for (int i = 0, j = 1; i < champs.Count; i++, j++)
+                        cmd.Parameters.AddWithValue(champs[i], dico[champs[i]]);
+                    return cmd.ExecuteNonQuery();
                 }
-                //foreach (KeyValuePair<string, string> keyValuePair in dico)
-                //{
-                //    requete += keyValuePair.Value + ",";
-                //}
-                requete += "' where "+ Connexion.getChamps_table(this.GetType().Name).FirstOrDefault() + "='" + dico.FirstOrDefault().Value+"'";
-                //Console.WriteLine(requete);
-
-                return Connexion.IUD(requete);
+                else
+                {
+                    for (int i = 0, j = 1; i < champs.Count; i++, j++)
+                        Console.WriteLine(champs[i]);
+                    // SqlCommand cmd = (SqlCommand)Connexion.GetCommand();
+                    // cmd.CommandText = procName;
+                    // cmd.CommandType = CommandType.StoredProcedure;
+                    // cmd.Parameters.Clear();
+                    // Console.WriteLine("here");
+                    //// Console.WriteLine(dico[champs[0]]);
+                    // for (int i = 0, j = 1; i < champs.Count; i++, j++)
+                    //     cmd.Parameters.AddWithValue(champs[i], dico[champs[i]]);
+                    // return cmd.ExecuteNonQuery();
+                    return 0;
+                }
+                //id++;
             }
+           // return 0;
         }
 
-        public dynamic find()
+        public dynamic find(string procName = null)
         {
             Dictionary<string, object> dico = new Dictionary<string, object>();
             Dictionary<string, string> ch = new Dictionary<string, string>();
             ch = ObjectToDictionary<string>(this);
-            sql = "select * from " + this.GetType().Name + " where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault() + "='" + ch.FirstOrDefault().Value+"';";
-             Console.WriteLine(sql);
-            //string typ = this.GetType().Name;
-            MySqlDataReader Dr = (MySqlDataReader)Connexion.Select(sql);
-            var jsonString = JsonSerializer.Serialize(Dr);
+            if (procName == null)
+            {
+                sql = "select * from " + this.GetType().Name + " where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault() + "='" + ch.FirstOrDefault().Value + "';";
+                Console.WriteLine(sql);
+                //string typ = this.GetType().Name;
+                MySqlDataReader Dr = (MySqlDataReader)Connexion.Select(sql);
+                var jsonString = JsonSerializer.Serialize(Dr);
 
-            // Deserialize
-            var obj = JsonSerializer.Deserialize<object>(jsonString);
-            //var objResponse1 = JsonConvert.DeserializeObject<List<RetrieveMultipleResponse>>(Dr);
-            //ch = Connection.getChamps_table(this.GetType().Name);
-            dico = ObjectToDictionary<object>(obj);
-            //int nombre = ch.Count;
+                // Deserialize
+                var obj = JsonSerializer.Deserialize<object>(jsonString);
+                //var objResponse1 = JsonConvert.DeserializeObject<List<RetrieveMultipleResponse>>(Dr);
+                //ch = Connection.getChamps_table(this.GetType().Name);
+                dico = ObjectToDictionary<object>(obj);
+                //int nombre = ch.Count;
 
-            /*-------------------------------optionnel--------------------------------*/
+                /*-------------------------------optionnel--------------------------------*/
 
-            //foreach (KeyValuePair<string, object> keyValuePair in dico)
-            //{
-            //    Console.WriteLine("{0}: {1}  ", keyValuePair.Key, keyValuePair.Value);
-            //}
-            //LE.Add(new this.GetType().Name(Dr.GetInt32(0), Dr.GetString(1), Dr.GetString(2), Dr.GetString(3)));
-            Dr.Close();
+                //foreach (KeyValuePair<string, object> keyValuePair in dico)
+                //{
+                //    Console.WriteLine("{0}: {1}  ", keyValuePair.Key, keyValuePair.Value);
+                //}
+                //LE.Add(new this.GetType().Name(Dr.GetInt32(0), Dr.GetString(1), Dr.GetString(2), Dr.GetString(3)));
+                Dr.Close();
 
-             return DictionaryToObject(dico);
-        }
+                return DictionaryToObject(dico);
+            }
+            else
+            {
+
+                //MySqlCommand cmd = (MySqlCommand)Connexion.GetCommand();
+                //cmd.CommandText = procName;
+                //cmd.CommandType = CommandType.StoredProcedure;
+                //cmd.Parameters.Clear();
+                ////Console.WriteLine(dico[champs[0]]);
+                //for (int i = 0, j = 1; i < champs.Count; i++, j++)
+                //    cmd.Parameters.AddWithValue(champs[i], dico[champs[i]]);
+                ////id++;
+                //return cmd.ExecuteNonQuery();
+                return DictionaryToObject(dico);
+            }
+            }
 
         public int delete()
         {
@@ -268,6 +323,7 @@ namespace TestConnexion
             Dictionary<string, object> dic = new Dictionary<string, object>();
             //List<object> list = new List<object>();
             //list = Connexion.getChamps_table(typeof(T).Name);
+            
             int nbr = data.FieldCount;
             //int i=0;
             while (data.Read())
@@ -322,6 +378,8 @@ namespace TestConnexion
             dico2 = new Dictionary<string, object>();
             // Dictionary<string, object> dico = new Dictionary<string, object>();
             List<string> champs = Connexion.getChamps_table(this.GetType().Name);
+            //for (int i = 0; i < champs.Count; i++)
+            //    Console.WriteLine(champs[i]);
             string Requete = "select * from " + this.GetType().Name + " where " + champs.FirstOrDefault() + "='" + dico.FirstOrDefault().Value + "';";
             Console.WriteLine(Requete);
             IDataReader data = Connexion.Select(Requete);
@@ -339,11 +397,12 @@ namespace TestConnexion
             data.Close();
             return list;
         }
-        public static List<dynamic> select<T>(Dictionary<string, object> dico)
+        public static List<dynamic> Select<T>(Dictionary<string, object> dico)
         {
             int test;
             int i = 1; //pour le comparer avec le compteur dico
             List<dynamic> data_list = new List<dynamic>();
+            List<string> champs = Connexion.getChamps_table(typeof(T).Name);
             string sql = "select * from " + typeof(T).Name + " where ";
             //Console.WriteLine(sql);
             for (test = 0; test < dico.Count() && dico.ElementAt(test).Key != "id"; test++) ;

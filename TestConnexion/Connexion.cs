@@ -13,35 +13,47 @@ namespace TestConnexion
     {
         static IDbConnection con = null;
         static IDbCommand cmd = null;
-        public static void Connect(string dbname, string server = "localhost", string user = "root", string password = "")
+        public static void Connect(string dbname, string server, string user, string password)
         {
-            if (con == null)
+
+            try 
             {
-                try
+                if (con == null)
+                {
+
+                    //con = new MySqlConnection("server = " + server + "; user id =" + user + "; database =" + dbname);
+                    //cmd = new MySqlCommand();
+
+                    con = new SqlConnection("Data Source =" + server + "; Initial Catalog =" + dbname + "; Integrated Security = True");
+                    cmd = new SqlCommand();
+                }
+                if (con.State.ToString() == "Closed")
+                {
+                    con.Open();
+                    cmd.Connection = con;
+                }
+            }
+            catch
+            {
+                if (con == null)
                 {
                     con = new MySqlConnection("server = " + server + "; user id =" + user + "; database =" + dbname);
                     cmd = new MySqlCommand();
-                    if (con.State.ToString() == "Closed")
-                    {
-                        con.Open();
-                        cmd.Connection = con;
-                    }
                 }
-                catch
+                if (con.State.ToString() == "Closed")
                 {
-                    //con = new SqlConnection(@"Server=(" + server + ")\\V11.0");
-                    con = new SqlConnection(@"Server=(" + server + ");Integrated Security=true");
-                    cmd = new SqlCommand();
-                    if (con.State.ToString() == "Closed")
-                    {
-                        con.Open();
-                        cmd.Connection = con;
-                    }
+                    con.Open();
+                    cmd.Connection = con;
                 }
             }
-          
-
-            Console.WriteLine(con.State.ToString());
+            finally
+            {
+                Console.WriteLine(con.State.ToString());
+            }
+        }
+        public static IDbCommand GetCommand()
+        {
+            return cmd;
         }
         public static int IUD(string req)
         {
@@ -86,14 +98,27 @@ namespace TestConnexion
         {
             Dictionary<string, string> dico = new Dictionary<string, string>();
             List<string> list = new List<string>();
-            IDataReader reader = Select("select column_name, column_type " +
-                "from information_schema.columns where table_name='" + table + "' and table_schema='" + con.Database + "';");
-
-            while (reader.Read())
+            if(con is MySqlConnection)
             {
-                list.Add(reader.GetString(0));
+                IDataReader reader = Select("select column_name, data_type " +
+                    "from information_schema.columns where table_name='" + table + "' and table_schema='" + con.Database + "';");
+                while (reader.Read())
+                {
+                    list.Add(reader.GetString(0));
+                }
+                reader.Close();
             }
-            reader.Close();
+            else
+            {
+                IDataReader reader = Select("select column_name, data_type " +
+                    "from information_schema.columns where table_name='" + table + "' and table_catalog='" + con.Database + "';");
+                while (reader.Read())
+                {
+                    list.Add(reader.GetString(0));
+                }
+                reader.Close();
+            }
+
             //foreach (KeyValuePair<string, string> d in dico)
             //{
             //    Console.WriteLine("Clé: {0}, Type: {1}", d.Key, d.Value);

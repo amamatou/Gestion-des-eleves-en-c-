@@ -16,7 +16,7 @@ namespace TP4
         public etudiants()
         {
             InitializeComponent();
-            Connexion.Connect("modeconnexion");
+            //Connexion.Connect("modeconnexion");
         }
 
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
