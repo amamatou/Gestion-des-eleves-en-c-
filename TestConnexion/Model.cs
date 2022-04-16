@@ -82,7 +82,6 @@ namespace TestConnexion
                         }
                         else if (a == nombre - 1)
                             requete += keyValuePair.Value + "');";
-
                     }
                     //Console.WriteLine(a);
                     id++;
@@ -157,17 +156,24 @@ namespace TestConnexion
            // return 0;
         }
 
-        public dynamic find(string procName = null)
+        public dynamic find()
         {
             Dictionary<string, object> dico = new Dictionary<string, object>();
             Dictionary<string, string> ch = new Dictionary<string, string>();
             ch = ObjectToDictionary<string>(this);
-            if (procName == null)
+            sql = "select * from " + this.GetType().Name + " where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault() + "='" + ch.FirstOrDefault().Value + "';";
+            //Console.WriteLine(sql);
+            //string typ = this.GetType().Name;
+            List<string> list = new List<string>();
+            if (Connexion.GetCommand().Connection is MySqlConnection)
             {
-                sql = "select * from " + this.GetType().Name + " where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault() + "='" + ch.FirstOrDefault().Value + "';";
-                Console.WriteLine(sql);
-                //string typ = this.GetType().Name;
                 MySqlDataReader Dr = (MySqlDataReader)Connexion.Select(sql);
+                while (Dr.Read())
+                {
+                    list.Add(Dr.GetString(0));
+                }
+                Afficher(list);
+
                 var jsonString = JsonSerializer.Serialize(Dr);
 
                 // Deserialize
@@ -175,6 +181,10 @@ namespace TestConnexion
                 //var objResponse1 = JsonConvert.DeserializeObject<List<RetrieveMultipleResponse>>(Dr);
                 //ch = Connection.getChamps_table(this.GetType().Name);
                 dico = ObjectToDictionary<object>(obj);
+                //foreach (string key in dico.Keys)
+                //{
+                //    Console.WriteLine(key);
+                //}
                 //int nombre = ch.Count;
 
                 /*-------------------------------optionnel--------------------------------*/
@@ -186,42 +196,81 @@ namespace TestConnexion
                 //LE.Add(new this.GetType().Name(Dr.GetInt32(0), Dr.GetString(1), Dr.GetString(2), Dr.GetString(3)));
                 Dr.Close();
 
-                return DictionaryToObject(dico);
             }
             else
             {
+                SqlDataReader Dr = (SqlDataReader)Connexion.Select(sql);
+                while (Dr.Read())
+                {
+                    Console.WriteLine(Dr.GetString(0) + " " + Dr.GetString(1) + " " + Dr.GetString(2) + " " + Dr.GetString(3));
+                }
+                var jsonString = JsonSerializer.Serialize(Dr);
+                // Deserialize
+                var obj = JsonSerializer.Deserialize<object>(jsonString);
+                dico = ObjectToDictionary<object>(obj);
+                Dr.Close();
 
-                //MySqlCommand cmd = (MySqlCommand)Connexion.GetCommand();
-                //cmd.CommandText = procName;
-                //cmd.CommandType = CommandType.StoredProcedure;
-                //cmd.Parameters.Clear();
-                ////Console.WriteLine(dico[champs[0]]);
-                //for (int i = 0, j = 1; i < champs.Count; i++, j++)
-                //    cmd.Parameters.AddWithValue(champs[i], dico[champs[i]]);
-                ////id++;
-                //return cmd.ExecuteNonQuery();
-                return DictionaryToObject(dico);
             }
-            }
+            return DictionaryToObject(dico);
+        }
 
-        public int delete()
+        public int delete(string procName = null)
         {
-            //dynamic objet = null;
-            //if (id != 0)
-            //{
+            if (procName == null)
+            {
+                //dynamic objet = null;
+                //if (id != 0)
+                //{
                 //objet = find();
 
                 Dictionary<string, string> dico = ObjectToDictionary<string>(this);
-            //foreach (KeyValuePair<string, string> d in dico)
-            //{
-            //    Console.WriteLine("{0} : {1}", d.Key, d.Value);
-            //}
-            //sql = "delete from " + this.GetType().Name + " where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault().Key + "='" + dico.FirstOrDefault().Value+"';";
-            sql = "delete from " + this.GetType().Name + " where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault()+ "='" + dico.FirstOrDefault().Value + "';";
-            Console.WriteLine(sql);
+                //foreach (KeyValuePair<string, string> d in dico)
+                //{
+                //    Console.WriteLine("{0} : {1}", d.Key, d.Value);
+                //}
+                //sql = "delete from " + this.GetType().Name + " where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault().Key + "='" + dico.FirstOrDefault().Value+"';";
+                sql = "delete from " + this.GetType().Name + " where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault() + "='" + dico.FirstOrDefault().Value + "';";
+                //Console.WriteLine(sql);
                 return Connexion.IUD(sql);
-            //}
-            //return 0;
+                //}
+                //return 0;
+            }
+            else
+            {
+                Dictionary<string, string> dico = new Dictionary<string, string>();
+                dico = ObjectToDictionary<string>(this);
+                List<string> champs = Connexion.getChamps_table(this.GetType().Name);
+
+                if (Connexion.GetCommand().Connection is MySqlConnection)
+                {
+                    MySqlCommand cmd = (MySqlCommand)Connexion.GetCommand();
+                    cmd.CommandText = procName;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue(champs[0], dico[champs[0]]);
+                    return cmd.ExecuteNonQuery();
+                }
+                else
+                {
+                    //for (int i = 0; i <= champs.Count-1; i++)
+                    //{
+                    //    Console.WriteLine(champs[i]);
+
+                    //    //Console.WriteLine(dico[champs[i]]);
+                    //}
+                    //foreach (string key in dico.Keys)
+                    //{
+                    //    Console.WriteLine(key);
+                    //}
+                    SqlCommand cmd = (SqlCommand)Connexion.GetCommand();
+                    cmd.CommandText = procName;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue(champs[0], dico[champs[0]]);
+                    return cmd.ExecuteNonQuery();
+                    //return 0;
+                }
+            }
         }
 
         public List<dynamic> All()

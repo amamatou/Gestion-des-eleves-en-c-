@@ -24,17 +24,17 @@ namespace ModeConsole
                 //}
 
                 Etudiant e = new Etudiant();
-                e.Code = "code3";
-                e.nom = "ali";
-                e.prenom = "rachid";
-                e.niveau = "ap2";
-                e.code_Fil = "fil2";
+                //e.Code = "code3";
+                //e.nom = "ali";
+                //e.prenom = "rachid";
+                //e.niveau = "ap2";
+                //e.code_Fil = "fil2";
 
-                //e.Code = "code2";
-                //e.nom = "mahamat";
-                //e.prenom = "alamine";
-                //e.niveau = "3e annee";
-                //e.code_Fil = "ginf";
+                e.Code = "code2";
+                e.nom = "mahamat";
+                e.prenom = "alamine";
+                e.niveau = "3e annee";
+                e.code_Fil = "ginf";
 
                 //*************TEST DE LA METHODE save()*************//
                 //e.id = 1;
@@ -47,15 +47,18 @@ namespace ModeConsole
                 //*************TEST DE LA METHODE save(procedure)*************//
                 //if (e.save("Etudiant_Insert") != 0)
                 //    Console.WriteLine("Insertion effectuee !!!!!!!");
-                if (e.save("Etudiant_update") != 0)
-                    Console.WriteLine("Modification effectuee !!!!!!!");
+                //if (e.save("Etudiant_update") != 0)
+                //    Console.WriteLine("Modification effectuee !!!!!!!");
 
 
 
                 //*************TEST DE LA METHODE find()*************//
                 //Console.WriteLine(e.find());
-                //Etudiant e2 = e.find();
+                //dynamic e2 = new Etudiant();
+                //e2 = e.find();
                 //Etudiant.Afficher(e2);
+                //Etudiant e2 = (Etudiant)e.find();
+
 
 
                 //*************TEST DE LA METHODE static find()*************//
@@ -65,7 +68,12 @@ namespace ModeConsole
 
                 //*************TEST DE LA METHODE delete()*************//
                 //if(e.delete())
-                //  Console.WriteLine("Suppression effectuee");
+                //  Console.WriteLine("Suppression effectuee !!!!!!");
+
+
+                //*************TEST DE LA METHODE delete(procedure)*************//
+                //if (e.delete("Etudiant_Delete") != 0)
+                //    Console.WriteLine("Suppression effectuee !!!!!!");
 
 
 

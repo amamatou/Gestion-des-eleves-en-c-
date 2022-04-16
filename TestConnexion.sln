@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModeConsole", "ModeConsole\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TP4", "TP4\TP4.csproj", "{9672CAEB-5921-4372-8948-B72BB94C022A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ensa", "ensa\ensa.csproj", "{F0D6D4E0-E2A9-4D3A-A895-DDF10F0B90E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9672CAEB-5921-4372-8948-B72BB94C022A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9672CAEB-5921-4372-8948-B72BB94C022A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9672CAEB-5921-4372-8948-B72BB94C022A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0D6D4E0-E2A9-4D3A-A895-DDF10F0B90E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0D6D4E0-E2A9-4D3A-A895-DDF10F0B90E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0D6D4E0-E2A9-4D3A-A895-DDF10F0B90E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0D6D4E0-E2A9-4D3A-A895-DDF10F0B90E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
