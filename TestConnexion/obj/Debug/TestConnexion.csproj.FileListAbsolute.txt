@@ -57,7 +57,6 @@ C:\Users\asus\source\repos\TestConnexion\TestConnexion\bin\Debug\tr\Microsoft.Bu
 C:\Users\asus\source\repos\TestConnexion\TestConnexion\bin\Debug\zh-Hans\Microsoft.Build.resources.dll
 C:\Users\asus\source\repos\TestConnexion\TestConnexion\bin\Debug\zh-Hant\Microsoft.Build.resources.dll
 C:\Users\asus\source\repos\TestConnexion\TestConnexion\bin\Debug\fr\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
-C:\Users\asus\source\repos\TestConnexion\TestConnexion\obj\Debug\TestConnexion.csproj.AssemblyReference.cache
 C:\Users\asus\source\repos\TestConnexion\TestConnexion\bin\Debug\Microsoft.Crm.Sdk.Proxy.dll
 C:\Users\asus\source\repos\TestConnexion\TestConnexion\bin\Debug\Microsoft.Xrm.Sdk.dll
 C:\Users\asus\source\repos\TestConnexion\TestConnexion\bin\Debug\System.ValueTuple.dll
@@ -72,3 +71,4 @@ C:\Users\asus\source\repos\TestConnexion\TestConnexion\bin\Debug\System.Text.Enc
 C:\Users\asus\source\repos\TestConnexion\TestConnexion\bin\Debug\System.Text.Json.xml
 C:\Users\asus\source\repos\TestConnexion\TestConnexion\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\asus\source\repos\TestConnexion\TestConnexion\bin\Debug\System.ValueTuple.xml
+C:\Users\asus\source\repos\TestConnexion\TestConnexion\obj\Debug\TestConnexion.csproj.AssemblyReference.cache

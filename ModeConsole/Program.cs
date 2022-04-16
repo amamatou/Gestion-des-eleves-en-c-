@@ -14,8 +14,8 @@ namespace ModeConsole
         {
             try
             {
-                //Connexion.Connect("modeconnexion","localhost", "root", "");
-                Connexion.Connect("modeconnecte", "MHAO\\SQLEXPRESS", "", "");
+                Connexion.Connect("modeconnexion","localhost", "root", "");
+                //Connexion.Connect("modeconnecte", "MHAO\\SQLEXPRESS", "", "");
                 //Dictionary<string, string> Dico = new Dictionary<string, string>();
                 //Dico = Connexion.getChamps_table("etudiant");
                 //foreach (KeyValuePair<string, string> d in Dico)
@@ -24,17 +24,17 @@ namespace ModeConsole
                 //}
 
                 Etudiant e = new Etudiant();
-                //e.Code = "code3";
-                //e.nom = "ali";
-                //e.prenom = "rach";
-                //e.niveau = "ap2";
-                //e.code_Fil = "fil2";
+                e.Code = "code3";
+                e.nom = "ali";
+                e.prenom = "rachid";
+                e.niveau = "ap2";
+                e.code_Fil = "fil2";
 
-                e.Code = "1";
-                e.nom = "mahamat";
-                e.prenom = "alamine";
-                e.niveau = "4e annee";
-                e.code_Fil = "ginf";
+                //e.Code = "code2";
+                //e.nom = "mahamat";
+                //e.prenom = "alamine";
+                //e.niveau = "3e annee";
+                //e.code_Fil = "ginf";
 
                 //*************TEST DE LA METHODE save()*************//
                 //e.id = 1;
@@ -45,72 +45,61 @@ namespace ModeConsole
 
 
                 //*************TEST DE LA METHODE save(procedure)*************//
-                e.save("Etudiant_Insert");
-                e.id = 1;
-                e.save("Etudiant_update");
+                //if (e.save("Etudiant_Insert") != 0)
+                //    Console.WriteLine("Insertion effectuee !!!!!!!");
+                if (e.save("Etudiant_update") != 0)
+                    Console.WriteLine("Modification effectuee !!!!!!!");
+
+
 
                 //*************TEST DE LA METHODE find()*************//
-                //Console.WriteLine( e.find());
+                //Console.WriteLine(e.find());
+                //Etudiant e2 = e.find();
+                //Etudiant.Afficher(e2);
+
+
+                //*************TEST DE LA METHODE static find()*************//
+                //Console.WriteLine( Etudiant.find());
 
 
 
                 //*************TEST DE LA METHODE delete()*************//
-                //Console.WriteLine(e.delete()); 
+                //if(e.delete())
+                //  Console.WriteLine("Suppression effectuee");
 
 
 
                 //*************TEST DE LA METHODE All()*************//
-                //List<dynamic> list = new List<dynamic>();
-                //list = e.All();
-                //foreach (var l in list)
-                //{
-                //    foreach (var x in l)
-                //        Console.WriteLine(x);
-                //    Console.WriteLine("===============================================");
-                //}
+                //List<dynamic> liste = new List<dynamic>();
+                //liste = e.All();
+                //Etudiant.Afficher(liste);
 
 
 
                 //*************TEST DE LA METHODE STATIC All()*************//
-                // List<List<dynamic>> liste = new List<List<dynamic>>();
-
+                ////List<List<dynamic>> liste = new List<List<dynamic>>();
                 //List<dynamic> liste = new List<dynamic>();
                 //liste = Etudiant.All<Etudiant>(e);
-                //foreach (Etudiant l in liste)
-                //{
-                //    foreach (var x in l)
-                //        Console.WriteLine(x);
-                //    Console.WriteLine("===============================================");
-                //}
+                //Etudiant.Afficher(liste);
 
 
 
 
                 //*************TEST DE LA METHODE Select()*************//
                 //Dictionary<string, object> etu = new Dictionary<string, object>();
-                //etu.Add("Code", "code2");
-                //List<dynamic> l = new List<dynamic>();
-                //l = e.Select(etu);
-                //foreach (var m in l)
-                //{
-                //    foreach (var x in m)
-                //        Console.WriteLine(x);
-                //    Console.WriteLine("===============================================");
-                //}
+                //etu.Add("Code", "code1");
+                //List<dynamic> liste = new List<dynamic>();
+                //liste = e.Select(etu);
+                //Etudiant.Afficher(l);
 
 
 
                 //*************TEST DE LA METHODE STATIC Select()*************//
                 //Dictionary<string, object> etu = new Dictionary<string, object>();
                 //etu.Add("Code", "code1");
-                //List<dynamic> eleve = new List<dynamic>();
-                //eleve = Etudiant.select<Etudiant>(etu);
-                //foreach (var m in eleve)
-                //{
-                //    foreach (var x in m)
-                //        Console.WriteLine(x);
-                //Console.WriteLine("===============================================");
-                //}
+                //List<dynamic> liste = new List<dynamic>();
+                //liste = Etudiant.Select<Etudiant>(etu);
+                //Etudiant.Afficher(liste);
 
 
 

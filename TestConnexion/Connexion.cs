@@ -21,11 +21,11 @@ namespace TestConnexion
                 if (con == null)
                 {
 
-                    //con = new MySqlConnection("server = " + server + "; user id =" + user + "; database =" + dbname);
-                    //cmd = new MySqlCommand();
+                    con = new MySqlConnection("server = " + server + "; user id =" + user + "; database =" + dbname);
+                    cmd = new MySqlCommand();
 
-                    con = new SqlConnection("Data Source =" + server + "; Initial Catalog =" + dbname + "; Integrated Security = True");
-                    cmd = new SqlCommand();
+                    //con = new SqlConnection("Data Source =" + server + "; Initial Catalog =" + dbname + "; Integrated Security = True");
+                    //cmd = new SqlCommand();
                 }
                 if (con.State.ToString() == "Closed")
                 {
@@ -37,8 +37,8 @@ namespace TestConnexion
             {
                 if (con == null)
                 {
-                    con = new MySqlConnection("server = " + server + "; user id =" + user + "; database =" + dbname);
-                    cmd = new MySqlCommand();
+                    con = new SqlConnection("Data Source =" + server + "; Initial Catalog =" + dbname + "; Integrated Security = True");
+                    cmd = new SqlCommand();
                 }
                 if (con.State.ToString() == "Closed")
                 {

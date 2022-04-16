@@ -111,7 +111,7 @@ namespace TestConnexion
                     //}
                     //requete += "' where " + champs[0] + "='" + dico.FirstOrDefault().Value + "'";
                     requete += "' where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault() + "='" + dico.FirstOrDefault().Value + "'";
-                    Console.WriteLine(requete);
+                   // Console.WriteLine(requete);
 
                     return Connexion.IUD(requete);
                 }
@@ -124,25 +124,33 @@ namespace TestConnexion
                     cmd.CommandText = procName;
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    Console.WriteLine(dico[champs[0]]);
+                    //Console.WriteLine(dico[champs[0]]);
                     for (int i = 0, j = 1; i < champs.Count; i++, j++)
                         cmd.Parameters.AddWithValue(champs[i], dico[champs[i]]);
                     return cmd.ExecuteNonQuery();
                 }
                 else
                 {
-                    for (int i = 0, j = 1; i < champs.Count; i++, j++)
-                        Console.WriteLine(champs[i]);
-                    // SqlCommand cmd = (SqlCommand)Connexion.GetCommand();
-                    // cmd.CommandText = procName;
-                    // cmd.CommandType = CommandType.StoredProcedure;
-                    // cmd.Parameters.Clear();
-                    // Console.WriteLine("here");
-                    //// Console.WriteLine(dico[champs[0]]);
-                    // for (int i = 0, j = 1; i < champs.Count; i++, j++)
-                    //     cmd.Parameters.AddWithValue(champs[i], dico[champs[i]]);
-                    // return cmd.ExecuteNonQuery();
-                    return 0;
+                    //for (int i = 0; i <= champs.Count-1; i++)
+                    //{
+                    //    Console.WriteLine(champs[i]);
+
+                    //    //Console.WriteLine(dico[champs[i]]);
+                    //}
+                    //foreach (string key in dico.Keys)
+                    //{
+                    //    Console.WriteLine(key);
+                    //}
+                    SqlCommand cmd = (SqlCommand)Connexion.GetCommand();
+                    cmd.CommandText = procName;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    //Console.WriteLine("here");
+                    //Console.WriteLine(dico[champs[4]]);
+                    for (int i = 0; i < champs.Count; i++)
+                        cmd.Parameters.AddWithValue(champs[i], dico[champs[i]]);
+                    return cmd.ExecuteNonQuery();
+                    //return 0;
                 }
                 //id++;
             }
@@ -204,10 +212,10 @@ namespace TestConnexion
                 //objet = find();
 
                 Dictionary<string, string> dico = ObjectToDictionary<string>(this);
-            foreach (KeyValuePair<string, string> d in dico)
-            {
-                Console.WriteLine("{0} : {1}", d.Key, d.Value);
-            }
+            //foreach (KeyValuePair<string, string> d in dico)
+            //{
+            //    Console.WriteLine("{0} : {1}", d.Key, d.Value);
+            //}
             //sql = "delete from " + this.GetType().Name + " where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault().Key + "='" + dico.FirstOrDefault().Value+"';";
             sql = "delete from " + this.GetType().Name + " where " + Connexion.getChamps_table(this.GetType().Name).FirstOrDefault()+ "='" + dico.FirstOrDefault().Value + "';";
             Console.WriteLine(sql);
@@ -459,6 +467,25 @@ namespace TestConnexion
         //    }
         //    return L;
         //}
+
+        public static void Afficher(dynamic d)
+        {
+            foreach (var m in d)
+            {
+                foreach (var x in m)
+                    Console.WriteLine(x);
+            }
+        }
+
+        public static void Afficher(List<dynamic> l)
+        {
+            foreach (var m in l)
+            {
+                Console.WriteLine("===============================================");
+                foreach (var x in m)
+                    Console.WriteLine(x);
+            }
+        }
 
 
     }
